@@ -1,0 +1,14 @@
+navibridge_handcraft:
+  config_path: "../model_weights/navibridge_handcraft.yaml"
+  ckpt_path: "../model_weights/navibridge_handcraft.pth"
+
+navibridge_noise:
+  config_path: "../model_weights/navibridge_noise.yaml"
+  ckpt_path: "../model_weights/navibridge_noise.pth"
+
+navibridge_cvae:
+  config_path: "../model_weights/navibridge_cvae.yaml"
+  ckpt_path: "../model_weights/navibridge_cvae.pth"
+cvae:
+  config_path: "../model_weights/cvae.yaml"
+  ckpt_path: "../model_weights/cvae.pth"

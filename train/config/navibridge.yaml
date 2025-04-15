@@ -1,0 +1,154 @@
+project_name: navibridge
+run_name: navibridge
+
+# training setup
+use_wandb: True # set to false if you don't want to log to wandb
+train: True
+batch_size: 256
+epochs: 30
+gpu_ids: [0]
+num_workers: 12
+lr: 1e-4
+optimizer: adamw
+clipping: False
+max_norm: 1.
+scheduler: "cosine"
+warmup: True 
+warmup_epochs: 4
+cyclic_period: 10
+plateau_patience: 3
+plateau_factor: 0.5
+seed: 0
+save_freq: 1
+
+# model params
+model_type: navibridge
+vision_encoder: navibridge_encoder
+encoding_size: 256
+obs_encoder: efficientnet-b0
+attn_unet: False
+cond_predict_scale: False
+mha_num_attention_heads: 4
+mha_num_attention_layers: 4
+mha_ff_dim_factor: 4
+down_dims: [64, 128, 256]
+
+# diffusion model params
+num_diffusion_iters: 10
+
+# mask 
+goal_mask_prob: 0.5
+
+# normalization for the action space
+normalize: True
+
+# context
+context_type: temporal
+context_size: 3 # 5
+alpha: 1e-4
+
+# distance bounds for distance and action and distance predictions 
+distance:
+  min_dist_cat: 0
+  max_dist_cat: 20
+action:
+  min_dist_cat: 3
+  max_dist_cat: 20
+
+# action output params
+len_traj_pred: 8
+action_dim: 2
+learn_angle: False
+
+# navibridge
+sampler_name: "uniform"
+pred_mode: "ve"
+weight_schedule: "karras"
+sigma_data: 0.5
+sigma_min: 0.002
+sigma_max: 10.0
+rho: 7.0
+beta_d: 2
+beta_min: 0.1
+cov_xy: 0.
+guidance: 1.
+
+clip_denoised: True
+sampler: "euler"
+churn_step_ratio: 0.33
+# prior settings
+prior_policy: "gaussian"  # handcraft, gaussian, cvae
+class_num: 5
+
+angle_ranges: [[0, 67.5],
+              [67.5, 112.5],
+              [112.5, 180],
+              [180, 270],
+              [270, 360]]
+min_std_angle: 5.0
+max_std_angle: 20.0
+min_std_length: 1.0
+max_std_length: 5.0
+
+# cvae
+train_params:
+  batch_size: 256
+  num_itr: 3001
+  lr: 0.5e-5
+  lr_gamma: 0.99
+  lr_step: 1000
+  l2_norm: 0.0
+  ema: 0.99
+
+
+diffuse_params:
+  latent_dim: 64
+  layer: 3
+  net_type: vae_mlp
+  ckpt_path: models/cvae.pth
+  pretrain: False
+
+# dataset specific parameters
+image_size: [96, 96] # width, height
+datasets:
+  recon:
+    data_folder: ./datasets/recon
+    train: ./datasets/data_splits/recon/train # path to train folder with traj_names.txt
+    test: ./datasets/data_splits/recon/test # path to test folder with traj_names.txt
+    end_slack: 3 # because many trajectories end in collisions
+    goals_per_obs: 1 # how many goals are sampled per observation
+    negative_mining: True # negative mining from the ViNG paper (Shah et al.)
+
+  go_stanford:
+    data_folder: ./datasets/go_stanford/ # datasets/stanford_go_new
+    train: ./datasets/data_splits/go_stanford/train/
+    test: ./datasets/data_splits/go_stanford/test/
+    end_slack: 0
+    goals_per_obs: 2 # increase dataset size
+    negative_mining: True
+
+  sacson:
+    data_folder: ./datasets/sacson/
+    train: ./datasets/data_splits/sacson/train/
+    test: ./datasets/data_splits/sacson/test/
+    end_slack: 3 # because many trajectories end in collisions
+    goals_per_obs: 1
+    negative_mining: True
+
+  scand:
+    data_folder: ./datasets/scand/
+    train: ./datasets/data_splits/scand/train/
+    test: ./datasets/data_splits/scand/test/
+    end_slack: 0
+    goals_per_obs: 1
+    negative_mining: True
+
+# logging stuff
+## =0 turns off
+print_log_freq: 100 # in iterations
+image_log_freq: 1000 #0 # in iterations
+num_images_log: 8 #0 
+pairwise_test_freq: 0 # in epochs
+eval_fraction: 0.25
+wandb_log_freq: 10 # in iterations
+eval_freq: 1 # in epochs
