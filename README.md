@@ -155,9 +155,10 @@ Here is our deployment platform information, you can replace it at will.
 
 ```bibtex
 @inproceedings{ren2025prior,
-  title={Prior Does Matter: Visual Navigation via Denoising Diffusion Bridge Models},
+  title={Prior does matter: Visual navigation via denoising diffusion bridge models},
   author={Ren, Hao and Zeng, Yiming and Bi, Zetong and Wan, Zhaoliang and Huang, Junlong and Cheng, Hui},
-  booktitle={IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  booktitle={Proceedings of the Computer Vision and Pattern Recognition Conference},
+  pages={12100--12110},
   year={2025}
 }
 ```
